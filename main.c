@@ -3,14 +3,8 @@
 #include <getopt.h>
 #include "image_processing.h"
 #include "image.h"
-typedef struct {
-    unsigned char r, g, b;
-} Pixel;
-
-typedef struct {
-    int width, height;
-    Pixel *pixels;
-} Image;
+#include <limits.h>
+#include <errno.h>
 
 Image *readPPM(const char *filename) {
     FILE *fp = fopen(filename, "rb");
@@ -95,13 +89,6 @@ Image *readPPM(const char *filename) {
     return img;
 }
 
-void convertToGrayscale(Image *img) {
-    for (int i = 0; i < img->width * img->height; ++i) {
-        unsigned char gray = (unsigned char)(0.299 * img->pixels[i].r + 0.587 * img->pixels[i].g + 0.114 * img->pixels[i].b);
-        img->pixels[i].r = img->pixels[i].g = img->pixels[i].b = gray;
-    }
-}
-
 void writePPM(const char *filename, Image *img) {
     FILE *fp = fopen(filename, "wb");
     if (!fp) {
@@ -117,12 +104,11 @@ void writePPM(const char *filename, Image *img) {
 
 
 int main(int argc, char *argv[]) {
-    Image *image = readPPM("C:\\Users\\kfedo\\Downloads\\forwork.ppm");
-    size_t width, height;
+    Image *image = readPPM("C:\\Users\\mihai\\Downloads\\040.ppm");
+
 
     if (image) {
-        int result = read_png_dimensions(image, &width, &height);
-        convertToGrayscale(image);
+        convert_to_grayscale(image, 1.0f,1.0f,1.0f);
         writePPM("output.ppm", image);
         free(image->pixels);
         free(image);
@@ -141,20 +127,19 @@ int main(int argc, char *argv[]) {
     };
 
     // Переменные для хранения результатов разбора опций
-    int opt;
+    int option;
     int option_index = 0;
-    char *input_filename = NULL;
     char *output_filename = NULL;
     int version = 0; // По умолчанию используется версия 0
     int benchmark = 0;
     int benchmark_repetitions = 1; // По умолчанию количество повторений равно 1
-    float a = 0.0, b = 0.0, c = 0.0; // Для коэффициентов
+    float a = 0.0f, b = 0.0f, c = 0.0f; // Для коэффициентов
     int brightness = 0; // Для яркости
     int contrast = 0; // Для контраста
 
     // Разбор опций
-    while ((opt = getopt_long(argc, argv,  "V:B::o:c:l:k:h", long_options, &option_index)) != -1) {
-        switch (opt) {
+    while ((option = getopt_long(argc, argv,  "V:B:o:c:l:k:h", long_options, &option_index)) != -1) {
+        switch (option) {
             case 'V':
                 version = atoi(optarg);
                 break;
@@ -172,7 +157,26 @@ int main(int argc, char *argv[]) {
                 sscanf(optarg, "%f,%f,%f", &a, &b, &c);
                 break;
             case 'l':
-                brightness = atoi(optarg);
+
+                errno = 0; // Устанавливаем errno в 0 перед вызовом strtol
+                char *endptr;
+                brightness = strtol(optarg, &endptr, 10);
+
+                // Проверяем ошибки преобразования
+                if ((errno == ERANGE && (brightness == LONG_MAX || brightness == LONG_MIN))
+                    || (errno != 0 && brightness == 0)) {
+                    perror("strtol");
+                    // Обработка ошибок
+                    exit(EXIT_FAILURE);
+                }
+
+                // Проверяем, была ли строка полностью преобразована
+                if (endptr == optarg) {
+                    fprintf(stderr, "No digits were found in --brightness argument\n");
+                    // Обработка ошибок
+                    exit(EXIT_FAILURE);
+                }
+
                 break;
             case 'k':
                 contrast = atoi(optarg);
@@ -182,14 +186,33 @@ int main(int argc, char *argv[]) {
                 return 0;
         }
     }
+    printf("Brightness: %d\n", brightness);
 
     // Разбор позиционных аргументов (например, имя входного файла)
     if (optind < argc) {
-        input_filename = argv[optind];
+        const char *input_filename = argv[optind];
+        Image *imagesecondtime = readPPM(input_filename);
+        if (image) {
+            // Обработка изображения (например, конвертация в градации серого)
+            convert_to_grayscale(imagesecondtime, 1.0f, 1.0f, 1.0f);
+
+            // Сохранение результата
+            writePPM("output.ppm", imagesecondtime);
+
+            // Освобождение памяти
+            free(imagesecondtime->pixels);
+            free(imagesecondtime);
+        } else {
+            fprintf(stderr, "Error reading PPM file.\n");
+            return EXIT_FAILURE;
+        }
+    } else {
+        fprintf(stderr, "Error: Missing input file.\n");
+        return EXIT_FAILURE;
     }
 
-    // Теперь можно выполнить основную логику программы с использованием полученных параметров
-    // ...
+
+
 
     return 0;
 }

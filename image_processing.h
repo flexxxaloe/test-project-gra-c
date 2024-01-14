@@ -3,8 +3,8 @@
 
 #include <stdint.h>
 #include <stddef.h>
-
-void convert_to_grayscale(uint8_t* img, size_t width, size_t height, float a, float b, float c, uint8_t* grayscale_img);
-void adjust_brightness_contrast(const uint8_t* grayscale_img, size_t width, size_t height, int16_t brightness, float contrast, uint8_t* result_img);
+#include "image.h"
+void convert_to_grayscale(Image* image, float a, float b, float c);
+void adjust_brightness_contrast(const Image* grayscale_img, int16_t brightness, float contrast, Image* result_img);
 
 #endif // IMAGE_PROCESSING_H
