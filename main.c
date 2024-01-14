@@ -2,6 +2,7 @@
 #include <stdlib.h>
 #include <getopt.h>
 #include "image_processing.h"
+#include "image.h"
 typedef struct {
     unsigned char r, g, b;
 } Pixel;
@@ -117,9 +118,10 @@ void writePPM(const char *filename, Image *img) {
 
 int main(int argc, char *argv[]) {
     Image *image = readPPM("C:\\Users\\kfedo\\Downloads\\forwork.ppm");
-    
-    if (image) {
+    size_t width, height;
 
+    if (image) {
+        int result = read_png_dimensions(image, &width, &height);
         convertToGrayscale(image);
         writePPM("output.ppm", image);
         free(image->pixels);

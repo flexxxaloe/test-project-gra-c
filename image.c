@@ -2,18 +2,18 @@
 #include <stdlib.h>
 #include <png.h>
 
-void read_png_dimensions(const char* filename, size_t* width, size_t* height) {
+int read_png_dimensions(const char* filename, size_t* width, size_t* height) {
     FILE* file = fopen(filename, "rb");
     if (!file) {
         perror("Error opening file");
-        return;
+        return -1;
     }
 
     png_structp png = png_create_read_struct(PNG_LIBPNG_VER_STRING, NULL, NULL, NULL);
     if (!png) {
         fclose(file);
         fprintf(stderr, "Error creating PNG read structure\n");
-        return;
+        return -1;
     }
 
     png_infop info = png_create_info_struct(png);
@@ -21,7 +21,7 @@ void read_png_dimensions(const char* filename, size_t* width, size_t* height) {
         png_destroy_read_struct(&png, NULL, NULL);
         fclose(file);
         fprintf(stderr, "Error creating PNG info structure\n");
-        return;
+        return -1;
     }
 
     png_init_io(png, file);
@@ -32,6 +32,7 @@ void read_png_dimensions(const char* filename, size_t* width, size_t* height) {
 
     png_destroy_read_struct(&png, &info, NULL);
     fclose(file);
+    return 0;
 }
 
 int main() {
