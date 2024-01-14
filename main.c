@@ -5,11 +5,13 @@
 #include "image.h"
 #include <limits.h>
 #include <errno.h>
+#include <unistd.h>
+#include <time.h>
 
 Image *readPPM(const char *filename) {
     FILE *fp = fopen(filename, "rb");
     if (!fp) {
-        perror("File opening failed");
+        perror("File opening failed read PPM");
         return NULL;
     }
 
@@ -100,20 +102,24 @@ void writePPM(const char *filename, Image *img) {
     fwrite(img->pixels, 3 * img->width, img->height, fp);
     fclose(fp);
 }
-
+void print_help(const char *program_name) {
+    printf("Usage: %s [OPTIONS] <input_filename>\n", program_name);
+    printf("Options:\n");
+    printf("  -V, --version <Zahl>     Die Implementierung, die verwendet werden soll. Hierbei soll mit -V 0 Ihre Hauptimplementierung verwendet werden. Wenn diese Option nicht gesetzt wird, soll ebenfalls die Hauptimplementierung ausgeführt werden.\n");
+    // ... (остальные опции)
+    printf("  -h, --help               Eine Beschreibung aller Optionen des Programms und Verwendungsbeispiele werden ausgegeben und das Programm danach beendet.\n");
+    printf("Examples:\n");
+    printf("  %s -V 1 -B 10 input.ppm -o output.ppm --brightness 50 --contrast -100\n", program_name);
+}
 
 
 int main(int argc, char *argv[]) {
-    Image *image = readPPM("C:\\Users\\mihai\\Downloads\\040.ppm");
-
-
+    Image *image = readPPM("C:\\Users\\mihai\\CLionProjects\\untitled2\\Autopilot_Shalnark.ppm");
+    float a = 0.0f, b = 0.0f, c = 0.0f; // Для коэффициентов
+    int version = 0; // По умолчанию используется версия 0
     if (image) {
         convert_to_grayscale(image, 1.0f,1.0f,1.0f);
-        writePPM("output.ppm", image);
-        free(image->pixels);
-        free(image);
-    }
-
+        adjust_contrast(image);
     // Определение длинных опций
     struct option long_options[] = {
             {"version", required_argument, 0, 'V'},
@@ -130,12 +136,10 @@ int main(int argc, char *argv[]) {
     int option;
     int option_index = 0;
     char *output_filename = NULL;
-    int version = 0; // По умолчанию используется версия 0
     int benchmark = 0;
     int benchmark_repetitions = 1; // По умолчанию количество повторений равно 1
-    float a = 0.0f, b = 0.0f, c = 0.0f; // Для коэффициентов
-    int brightness = 0; // Для яркости
-    int contrast = 0; // Для контраста
+
+
 
     // Разбор опций
     while ((option = getopt_long(argc, argv,  "V:B:o:c:l:k:h", long_options, &option_index)) != -1) {
@@ -160,11 +164,9 @@ int main(int argc, char *argv[]) {
 
                 errno = 0; // Устанавливаем errno в 0 перед вызовом strtol
                 char *endptr;
-                brightness = strtol(optarg, &endptr, 10);
-
+                image->brightness = strtol(optarg, &endptr, 10);
                 // Проверяем ошибки преобразования
-                if ((errno == ERANGE && (brightness == LONG_MAX || brightness == LONG_MIN))
-                    || (errno != 0 && brightness == 0)) {
+                if (image->brightness <  -255 || image->brightness > 255 || errno != 0) {
                     perror("strtol");
                     // Обработка ошибок
                     exit(EXIT_FAILURE);
@@ -176,26 +178,75 @@ int main(int argc, char *argv[]) {
                     // Обработка ошибок
                     exit(EXIT_FAILURE);
                 }
-
+                //adjust_brightness_contrast( image, brightness, float contrast, Image* result_img);
                 break;
             case 'k':
-                contrast = atoi(optarg);
+                errno = 0; // Устанавливаем errno в 0 перед вызовом strtod
+                char *endpointer;
+                image->contrast = strtol(optarg, &endpointer,10);
+                // Проверяем ошибки преобразования
+                if (image->contrast <  -255 || image->contrast > 255 || errno != 0) {
+                    perror("strtol");
+                    // Обработка ошибок
+                    exit(EXIT_FAILURE);
+                }
+
+                // Проверяем, была ли строка полностью преобразована
+                if (endptr == optarg) {
+                    fprintf(stderr, "No digits were found in --contrast argument\n");
+                    // Обработка ошибок
+                    exit(EXIT_FAILURE);
+                }
                 break;
+
             case 'h':
-                printf("Usage: ..."); // Выведите справку по использованию программы
+                print_help(argv[0]);
                 return 0;
+            default:
+                fprintf(stderr, "Unknown option: %c\n", optopt);
+                exit(EXIT_FAILURE);
         }
     }
-    printf("Brightness: %d\n", brightness);
+        if (output_filename) {
+            // Здесь вы можете использовать output_filename для записи изображения
+            writePPM("output.ppm", image);
+        } else {
+            // Обработка, если имя файла не было установлено
+            fprintf(stderr, "Не указано имя файла для вывода (-o)\n");
+            return EXIT_FAILURE;
+        }
+        if (benchmark) {
+            printf("Benchmarking with %d repetitions\n", benchmark_repetitions);
 
+            // Измеряем время выполнения функции
+            clock_t start_time = clock();
+            for (int i = 0; i < benchmark_repetitions; ++i) {
+                convert_to_grayscale(image, 1.0f,1.0f,1.0f);
+                adjust_contrast(image);
+            }
+            clock_t end_time = clock();
+
+            double execution_time = ((double) (end_time - start_time)) / CLOCKS_PER_SEC;
+            printf("Total execution time: %f seconds\n", execution_time);
+        } else {
+            // Здесь обрабатывайте другие параметры и выполняйте программу без измерения времени
+        }
+        writePPM("output.ppm", image);
+        free(image->pixels);
+        free(image);
+    }
+    printf("Brightness: %d\n", image->brightness);
+    printf("Contrast: %d\n", image->contrast);
+    printf("Coefficients: a=%f, b=%f, c=%f\n", a, b, c);
+    printf("Selected version: %d\n", version);
     // Разбор позиционных аргументов (например, имя входного файла)
     if (optind < argc) {
         const char *input_filename = argv[optind];
         Image *imagesecondtime = readPPM(input_filename);
-        if (image) {
+        if (imagesecondtime) {
             // Обработка изображения (например, конвертация в градации серого)
             convert_to_grayscale(imagesecondtime, 1.0f, 1.0f, 1.0f);
-
+            adjust_contrast(imagesecondtime);
             // Сохранение результата
             writePPM("output.ppm", imagesecondtime);
 
@@ -212,7 +263,6 @@ int main(int argc, char *argv[]) {
     }
 
 
-
-
     return 0;
 }
+

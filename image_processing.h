@@ -6,5 +6,5 @@
 #include "image.h"
 void convert_to_grayscale(Image* image, float a, float b, float c);
 void adjust_brightness_contrast(const Image* grayscale_img, int16_t brightness, float contrast, Image* result_img);
-
+void adjust_contrast(Image *image);
 #endif // IMAGE_PROCESSING_H
