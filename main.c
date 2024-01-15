@@ -213,7 +213,12 @@ int main(int argc, char *argv[]) {
         if(version == 1){
             convert_to_grayscale(image, a, b, c);
             simple_adjust_contrast(image);
-        }else {
+        }else if(version == 2){
+            convert_to_grayscale(image, a, b, c);
+            simple_adjust_contrast(image);
+
+        }
+        else {
             convert_to_grayscale(image, a, b, c);
             adjust_contrast(image);
         }
