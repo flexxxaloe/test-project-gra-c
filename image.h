@@ -14,7 +14,7 @@ typedef struct {
     int width, height;
     Pixel *pixels;
     int16_t brightness;
-    int16_t contrast;
+    float contrast;
 } Image;
 
 void read_png_dimensions(const char* filename, size_t* width, size_t* height);

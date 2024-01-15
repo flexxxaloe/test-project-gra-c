@@ -21,10 +21,10 @@ void convert_to_grayscale(Image* image, float a, float b, float c) {
         unsigned char red = image->pixels[i].r;
         unsigned char green = image->pixels[i].g;
         unsigned char blue = image->pixels[i].b;
-        int16_t adjusted_brightness = red + image->brightness;
+
         // Вычисление взвешенного среднего для оттенка серого
         uint8_t grayscale_value = (uint8_t)((a * red + b * green + c * blue) / (a + b + c));
-        grayscale_value = clamp((int)adjusted_brightness + grayscale_value, 0, 255);
+        grayscale_value = clamp((int)image->brightness + grayscale_value, 0, 255);
         // Запись значения в текущий пиксель в оттенках серого
         image->pixels[i].r = grayscale_value;
         image->pixels[i].g = grayscale_value;
@@ -32,14 +32,14 @@ void convert_to_grayscale(Image* image, float a, float b, float c) {
     }
 }
 void adjust_contrast(Image *image) {
-    float contrast = (float)image->contrast;
+    float contrast = image->contrast;
     // Реализация коррекции контраста
     size_t num_pixels = image->width * image->height;
 
     // Вычисление среднего значения яркости
     float mean_brightness = 0.0f;
     for (size_t i = 0; i < num_pixels; ++i) {
-        mean_brightness += (float)image->pixels[i].r;
+        mean_brightness += (float)(image->pixels[i].r + image->pixels[i].g + image->pixels[i].b)/3;
     }
     mean_brightness /= (float)num_pixels;
 
