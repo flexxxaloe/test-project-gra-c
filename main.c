@@ -214,8 +214,8 @@ int main(int argc, char *argv[]) {
             convert_to_grayscale(image, a, b, c);
             simple_adjust_contrast(image);
         }else if(version == 2){
-            convert_to_grayscale(image, a, b, c);
-            simple_adjust_contrast(image);
+            simd_convert_to_grayscale(image, a, b, c);
+            adjust_contrast(image);
 
         }
         else {
@@ -233,8 +233,18 @@ int main(int argc, char *argv[]) {
             // Измеряем время выполнения функции
             clock_t start_time = clock();
             for (int i = 0; i < benchmark_repetitions; ++i) {
-                convert_to_grayscale(image, 1.0f, 1.0f, 1.0f);
-                adjust_contrast(image);
+                if(version == 1){
+                    convert_to_grayscale(image, a, b, c);
+                    simple_adjust_contrast(image);
+                }else if(version == 2){
+                    simd_convert_to_grayscale(image, a, b, c);
+                    adjust_contrast(image);
+
+                }
+                else {
+                    convert_to_grayscale(image, a, b, c);
+                    adjust_contrast(image);
+                }
             }
             clock_t end_time = clock();
 
