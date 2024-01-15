@@ -5,7 +5,7 @@
 #ifndef UNTITLED2_SIMPLEMATH_H
 #define UNTITLED2_SIMPLEMATH_H
 
-float sqrtfunc(double n);
+float sqrtfunc(float n);
 float power(float base, int exponent);
 
 #endif //UNTITLED2_SIMPLEMATH_H
