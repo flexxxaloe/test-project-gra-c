@@ -67,6 +67,12 @@ build CMakeFiles/untitled2.dir/image.c.obj: C_COMPILER__untitled2_unscanned_Debu
   OBJECT_DIR = CMakeFiles\untitled2.dir
   OBJECT_FILE_DIR = CMakeFiles\untitled2.dir
 
+build CMakeFiles/untitled2.dir/simplemath.c.obj: C_COMPILER__untitled2_unscanned_Debug C$:/Users/mihai/CLionProjects/untitled2/simplemath.c || cmake_object_order_depends_target_untitled2
+  DEP_FILE = CMakeFiles\untitled2.dir\simplemath.c.obj.d
+  FLAGS = -g -fdiagnostics-color=always
+  OBJECT_DIR = CMakeFiles\untitled2.dir
+  OBJECT_FILE_DIR = CMakeFiles\untitled2.dir
+
 
 # =============================================================================
 # Link build statements for EXECUTABLE target untitled2
@@ -75,7 +81,7 @@ build CMakeFiles/untitled2.dir/image.c.obj: C_COMPILER__untitled2_unscanned_Debu
 #############################################
 # Link the executable untitled2.exe
 
-build untitled2.exe: C_EXECUTABLE_LINKER__untitled2_Debug CMakeFiles/untitled2.dir/main.c.obj CMakeFiles/untitled2.dir/image_processing.c.obj CMakeFiles/untitled2.dir/image.c.obj
+build untitled2.exe: C_EXECUTABLE_LINKER__untitled2_Debug CMakeFiles/untitled2.dir/main.c.obj CMakeFiles/untitled2.dir/image_processing.c.obj CMakeFiles/untitled2.dir/image.c.obj CMakeFiles/untitled2.dir/simplemath.c.obj
   FLAGS = -g
   LINK_LIBRARIES = -lkernel32 -luser32 -lgdi32 -lwinspool -lshell32 -lole32 -loleaut32 -luuid -lcomdlg32 -ladvapi32
   OBJECT_DIR = CMakeFiles\untitled2.dir

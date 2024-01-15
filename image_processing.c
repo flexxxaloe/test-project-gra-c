@@ -1,7 +1,8 @@
 #include "image_processing.h"
 #include "image.h"
 #include <math.h>
-
+#include <stdio.h>
+#include "simplemath.h"
 uint8_t clamp(int value, int min, int max) {
     if (value < min) {
         return min;
@@ -89,3 +90,36 @@ void adjust_brightness_contrast(const Image* grayscale_img, int16_t brightness, 
     }
 }
  */
+void simple_adjust_contrast(Image *image) {
+    float contrast = image->contrast;
+    // Реализация коррекции контраста
+    size_t num_pixels = image->width * image->height;
+
+    // Вычисление среднего значения яркости
+    float mean_brightness = 0.0f;
+    for (size_t i = 0; i < num_pixels; ++i) {
+        mean_brightness += (float)(image->pixels[i].r + image->pixels[i].g + image->pixels[i].b)/3;
+    }
+    mean_brightness /= (float)num_pixels;
+
+    // Вычисление стандартного отклонения яркости
+    float brightness_deviation = 0.0f;
+    for (size_t i = 0; i < num_pixels; ++i) {
+        brightness_deviation += power((float)image->pixels[i].r - mean_brightness, 2);
+    }
+    brightness_deviation = sqrtfunc(brightness_deviation / (float)num_pixels);
+
+    // Коррекция контраста
+    for (size_t i = 0; i < num_pixels; ++i) {
+        float adjusted_brightness;
+        if(brightness_deviation == 0){
+            adjusted_brightness = mean_brightness;
+        } else {
+            adjusted_brightness = (contrast / brightness_deviation) * (float)image->pixels[i].r +
+                                  mean_brightness * (1 - (contrast / brightness_deviation));
+        }
+        image->pixels[i].r = clamp((int)adjusted_brightness, 0, 255);
+        image->pixels[i].g = clamp((int)adjusted_brightness, 0, 255);
+        image->pixels[i].b = clamp((int)adjusted_brightness, 0, 255);
+    }
+}

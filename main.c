@@ -7,7 +7,6 @@
 #include <errno.h>
 #include <unistd.h>
 #include <time.h>
-
 Image *readPPM(const char *filename) {
     FILE *fp = fopen(filename, "rb");
     if (!fp) {
@@ -211,9 +210,13 @@ int main(int argc, char *argv[]) {
                     exit(EXIT_FAILURE);
             }
         }
-
-        convert_to_grayscale(image, a, b, c);
-        adjust_contrast(image);
+        if(version == 1){
+            convert_to_grayscale(image, a, b, c);
+            simple_adjust_contrast(image);
+        }else {
+            convert_to_grayscale(image, a, b, c);
+            adjust_contrast(image);
+        }
         if (!output_filename) {
             // Здесь вы можете использовать output_filename для записи изображения
             output_filename = "output.ppm";
