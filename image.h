@@ -18,7 +18,7 @@ typedef struct {
 } Image;
 
 void read_png_dimensions(const char* filename, size_t* width, size_t* height);
-
-
+Image *readPPM(const char *filename);
+void writePPM(const char *filename, Image *img);
 #endif // IMAGE_H
 
