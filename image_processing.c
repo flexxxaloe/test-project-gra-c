@@ -114,14 +114,13 @@ void adjust_contrast(Image *image) {
         mean_brightness += (float)(image->pixels[i].r + image->pixels[i].g + image->pixels[i].b)/3;
     }
     mean_brightness /= (float)num_pixels;
-
     // Вычисление стандартного отклонения яркости
     float brightness_deviation = 0.0f;
     for (size_t i = 0; i < num_pixels; ++i) {
         brightness_deviation += powf((float)image->pixels[i].r - mean_brightness, 2);
     }
     brightness_deviation = sqrtf(brightness_deviation / (float)num_pixels);
-
+    printf("Otklonenie Yarkosti: %f \n", brightness_deviation);
     // Коррекция контраста
     for (size_t i = 0; i < num_pixels; ++i) {
         float adjusted_brightness;
@@ -147,14 +146,13 @@ void simple_adjust_contrast(Image *image) {
         mean_brightness += (float)(image->pixels[i].r + image->pixels[i].g + image->pixels[i].b)/3;
     }
     mean_brightness /= (float)num_pixels;
-
     // Вычисление стандартного отклонения яркости
     float brightness_deviation = 0.0f;
     for (size_t i = 0; i < num_pixels; ++i) {
         brightness_deviation += power((float)image->pixels[i].r - mean_brightness, 2);
     }
     brightness_deviation = sqrtfunc(brightness_deviation / (float)num_pixels);
-
+    printf("Otklonenie Yarkosti v prostom: %f \n", brightness_deviation);
     // Коррекция контраста
     for (size_t i = 0; i < num_pixels; ++i) {
         float adjusted_brightness;

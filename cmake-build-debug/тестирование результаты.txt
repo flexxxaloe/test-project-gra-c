@@ -235,3 +235,72 @@ Total execution time with 75 repetitions: 89.704000 seconds
 Benchmarking with 100 repetitions
 Total execution time with 100 repetitions: 119.314000 seconds
 
+
+08 картинка
+
+Яркость 0
+Otklonenie Yarkosti: 49.849869
+Otklonenie Yarkosti v prostom: 49.930443
+
+Яркость 111
+Otklonenie Yarkosti: 40.997044
+Otklonenie Yarkosti v prostom: 41.062611
+
+Яркость -111
+Otklonenie Yarkosti: 21.708843
+Otklonenie Yarkosti v prostom: 21.730598
+
+Яркость 200
+Otklonenie Yarkosti: 18.447075
+Otklonenie Yarkosti v prostom: 18.457220
+
+Яркость -200
+Otklonenie Yarkosti: 2.730004
+Otklonenie Yarkosti v prostom: 2.732445
+
+Яркость -255
+0
+0
+
+Яркость 255
+Otklonenie Yarkosti: 0.822017
+Otklonenie Yarkosti v prostom: 0.823380
+
+
+16к картинка
+Яркость -255
+0
+0
+Яркость -200
+Otklonenie Yarkosti: 3.108976
+Otklonenie Yarkosti v prostom: 3.113942
+
+Яркость -150
+Otklonenie Yarkosti: 8.796325
+Otklonenie Yarkosti v prostom: 8.796648
+
+
+Яркость -100
+Otklonenie Yarkosti: 17.811277
+Otklonenie Yarkosti v prostom: 17.813457
+
+
+Яркость -50
+Otklonenie Yarkosti: 30.280937
+Otklonenie Yarkosti v prostom: 30.296768
+
+Яркость 0
+Otklonenie Yarkosti: 44.939838
+Otklonenie Yarkosti v prostom: 44.956276
+
+Яркость 100
+Otklonenie Yarkosti: 42.075085
+Otklonenie Yarkosti v prostom: 42.135864
+
+Яркость 200
+Otklonenie Yarkosti: 50.010990
+Otklonenie Yarkosti v prostom: 50.093170
+
+Яркость 250
+Otklonenie Yarkosti: 75.674454
+Otklonenie Yarkosti v prostom: 75.744827

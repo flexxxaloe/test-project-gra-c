@@ -141,7 +141,7 @@ int main(int argc, char *argv[]) {
         }
         if (benchmark) {
             benchmarking(benchmark_repetitions, image, a, b, c, version);
-            test_alg(image, a, b, c, version);
+           // test_alg(image, a, b, c, version);
         } else {
             if(version == 1){
                 convert_to_grayscale(image, a, b, c);

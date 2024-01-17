@@ -15,7 +15,7 @@ void benchmarking(int benchmark_repetitions, Image* image, float a, float b, flo
             simple_adjust_contrast(image);
         }else if(version == 2){
             simd_convert_to_grayscale(image, a, b, c);
-            adjust_contrast(image);
+            simd_adjust_contrast(image);
 
         }
         else {
