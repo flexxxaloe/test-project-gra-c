@@ -1,0 +1,237 @@
+
+
+Brightness: 0
+Contrast: 0.000000
+Coefficients: a=0.212600, b=0.715200, c=0.072200
+Selected version: 0
+
+
+картинка фейтан 800
+
+
+версия простая
+
+Benchmarking with 1 repetitions
+Total execution time with 1 repetitions: 0.019000 seconds
+Benchmarking with 10 repetitions
+Total execution time with 10 repetitions: 0.180000 seconds
+Benchmarking with 50 repetitions
+Total execution time with 50 repetitions: 0.897000 seconds
+Benchmarking with 100 repetitions
+Total execution time with 100 repetitions: 1.823000 seconds
+Benchmarking with 150 repetitions
+Total execution time with 150 repetitions: 2.716000 seconds
+Benchmarking with 200 repetitions
+Total execution time with 200 repetitions: 3.709000 seconds
+Benchmarking with 250 repetitions
+Total execution time with 250 repetitions: 4.548000 seconds
+
+версия обычная без упрощений
+
+Benchmarking with 1 repetitions
+Total execution time with 1 repetitions: 0.008000 seconds
+Benchmarking with 10 repetitions
+Total execution time with 10 repetitions: 0.085000 seconds
+Benchmarking with 50 repetitions
+Total execution time with 50 repetitions: 0.408000 seconds
+Benchmarking with 100 repetitions
+Total execution time with 100 repetitions: 0.789000 seconds
+Benchmarking with 150 repetitions
+Total execution time with 150 repetitions: 1.192000 seconds
+Benchmarking with 200 repetitions
+Total execution time with 200 repetitions: 1.625000 seconds
+Benchmarking with 250 repetitions
+Total execution time with 250 repetitions: 2.036000 seconds
+
+версия симд
+
+Benchmarking with 1 repetitions
+Total execution time with 1 repetitions: 0.020000 seconds
+Benchmarking with 10 repetitions
+Total execution time with 10 repetitions: 0.180000 seconds
+Benchmarking with 50 repetitions
+Total execution time with 50 repetitions: 0.912000 seconds
+Benchmarking with 100 repetitions
+Total execution time with 100 repetitions: 1.871000 seconds
+Benchmarking with 150 repetitions
+Total execution time with 150 repetitions: 2.799000 seconds
+Benchmarking with 200 repetitions
+Total execution time with 200 repetitions: 3.721000 seconds
+Benchmarking with 250 repetitions
+Total execution time with 250 repetitions: 4.581000 seconds
+
+
+
+Картинка 1к шалнарк
+
+
+версия обычная без упрощений
+
+Benchmarking with 1 repetitions
+Total execution time with 1 repetitions: 0.044000 seconds
+Benchmarking with 10 repetitions
+Total execution time with 10 repetitions: 0.452000 seconds
+Benchmarking with 50 repetitions
+Total execution time with 50 repetitions: 2.283000 seconds
+Benchmarking with 100 repetitions
+Total execution time with 100 repetitions: 4.535000 seconds
+Benchmarking with 150 repetitions
+Total execution time with 150 repetitions: 6.795000 seconds
+Benchmarking with 200 repetitions
+Total execution time with 200 repetitions: 9.114000 seconds
+Benchmarking with 250 repetitions
+Total execution time with 250 repetitions: 11.127000 seconds
+
+версия простая
+
+Benchmarking with 1 repetitions
+Total execution time with 1 repetitions: 0.019000 seconds
+Benchmarking with 10 repetitions
+Total execution time with 10 repetitions: 0.192000 seconds
+Benchmarking with 50 repetitions
+Total execution time with 50 repetitions: 0.988000 seconds
+Benchmarking with 100 repetitions
+Total execution time with 100 repetitions: 2.032000 seconds
+Benchmarking with 150 repetitions
+Total execution time with 150 repetitions: 3.062000 seconds
+Benchmarking with 200 repetitions
+Total execution time with 200 repetitions: 3.930000 seconds
+Benchmarking with 250 repetitions
+Total execution time with 250 repetitions: 5.057000 seconds
+
+
+версия симд
+
+Benchmarking with 1 repetitions
+Total execution time with 1 repetitions: 0.046000 seconds
+Benchmarking with 10 repetitions
+Total execution time with 10 repetitions: 0.446000 seconds
+Benchmarking with 50 repetitions
+Total execution time with 50 repetitions: 2.257000 seconds
+Benchmarking with 100 repetitions
+Total execution time with 100 repetitions: 4.501000 seconds
+Benchmarking with 150 repetitions
+Total execution time with 150 repetitions: 6.884000 seconds
+Benchmarking with 200 repetitions
+Total execution time with 200 repetitions: 9.036000 seconds
+Benchmarking with 250 repetitions
+Total execution time with 250 repetitions: 11.255000 seconds
+
+
+
+
+картинка 4к гора
+
+
+версия обычная
+
+Benchmarking with 1 repetitions
+Total execution time with 1 repetitions: 0.412000 seconds
+Benchmarking with 10 repetitions
+Total execution time with 10 repetitions: 4.105000 seconds
+Benchmarking with 20 repetitions
+Total execution time with 20 repetitions: 8.281000 seconds
+Benchmarking with 30 repetitions
+Total execution time with 30 repetitions: 12.335000 seconds
+Benchmarking with 50 repetitions
+Total execution time with 50 repetitions: 20.238000 seconds
+Benchmarking with 75 repetitions
+Total execution time with 75 repetitions: 30.440000 seconds
+Benchmarking with 100 repetitions
+Total execution time with 100 repetitions: 40.978000 seconds
+
+
+
+версия простая
+
+Benchmarking with 1 repetitions
+Total execution time with 1 repetitions: 0.184000 seconds
+Benchmarking with 10 repetitions
+Total execution time with 10 repetitions: 1.799000 seconds
+Benchmarking with 20 repetitions
+Total execution time with 20 repetitions: 3.540000 seconds
+Benchmarking with 30 repetitions
+Total execution time with 30 repetitions: 5.396000 seconds
+Benchmarking with 50 repetitions
+Total execution time with 50 repetitions: 8.815000 seconds
+Benchmarking with 75 repetitions
+Total execution time with 75 repetitions: 13.600000 seconds
+Benchmarking with 100 repetitions
+Total execution time with 100 repetitions: 18.293000 seconds
+
+
+версия симд
+
+Benchmarking with 1 repetitions
+Total execution time with 1 repetitions: 0.436000 seconds
+Benchmarking with 10 repetitions
+Total execution time with 10 repetitions: 4.400000 seconds
+Benchmarking with 20 repetitions
+Total execution time with 20 repetitions: 8.487000 seconds
+Benchmarking with 30 repetitions
+Total execution time with 30 repetitions: 12.726000 seconds
+Benchmarking with 50 repetitions
+Total execution time with 50 repetitions: 21.317000 seconds
+Benchmarking with 75 repetitions
+Total execution time with 75 repetitions: 32.055000 seconds
+Benchmarking with 100 repetitions
+Total execution time with 100 repetitions: 42.843000 seconds
+
+
+
+картинка 16к машина
+
+
+версия обычная
+
+Benchmarking with 1 repetitions
+Total execution time with 1 repetitions: 1.185000 seconds
+Benchmarking with 10 repetitions
+Total execution time with 10 repetitions: 11.816000 seconds
+Benchmarking with 20 repetitions
+Total execution time with 20 repetitions: 23.920000 seconds
+Benchmarking with 30 repetitions
+Total execution time with 30 repetitions: 36.221000 seconds
+Benchmarking with 50 repetitions
+Total execution time with 50 repetitions: 58.522000 seconds
+Benchmarking with 75 repetitions
+Total execution time with 75 repetitions: 88.698000 seconds
+Benchmarking with 100 repetitions
+Total execution time with 100 repetitions: 119.274000 seconds
+
+
+версия простая
+
+Benchmarking with 1 repetitions
+Total execution time with 1 repetitions: 0.508000 seconds
+Benchmarking with 10 repetitions
+Total execution time with 10 repetitions: 5.188000 seconds
+Benchmarking with 20 repetitions
+Total execution time with 20 repetitions: 10.443000 seconds
+Benchmarking with 30 repetitions
+Total execution time with 30 repetitions: 15.774000 seconds
+Benchmarking with 50 repetitions
+Total execution time with 50 repetitions: 26.295000 seconds
+Benchmarking with 75 repetitions
+Total execution time with 75 repetitions: 38.786000 seconds
+Benchmarking with 100 repetitions
+Total execution time with 100 repetitions: 52.524000 seconds
+
+
+версия симд
+
+Benchmarking with 1 repetitions
+Total execution time with 1 repetitions: 1.167000 seconds
+Benchmarking with 10 repetitions
+Total execution time with 10 repetitions: 11.928000 seconds
+Benchmarking with 20 repetitions
+Total execution time with 20 repetitions: 23.781000 seconds
+Benchmarking with 30 repetitions
+Total execution time with 30 repetitions: 36.559000 seconds
+Benchmarking with 50 repetitions
+Total execution time with 50 repetitions: 60.466000 seconds
+Benchmarking with 75 repetitions
+Total execution time with 75 repetitions: 89.704000 seconds
+Benchmarking with 100 repetitions
+Total execution time with 100 repetitions: 119.314000 seconds
+

@@ -55,7 +55,8 @@
 				0,
 				1,
 				2,
-				4
+				4,
+				5
 			]
 		}
 	],
@@ -95,7 +96,8 @@
 				0,
 				1,
 				2,
-				4
+				4,
+				5
 			]
 		},
 		{
@@ -103,7 +105,7 @@
 			"sourceIndexes" : 
 			[
 				3,
-				5
+				6
 			]
 		}
 	],
@@ -140,7 +142,13 @@
 		},
 		{
 			"backtrace" : 1,
-			"path" : "simplemath.h",
+			"compileGroupIndex" : 0,
+			"path" : "benchmark.c",
+			"sourceGroupIndex" : 0
+		},
+		{
+			"backtrace" : 1,
+			"path" : "benchmark.h",
 			"sourceGroupIndex" : 1
 		}
 	],

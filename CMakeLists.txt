@@ -8,4 +8,6 @@ add_executable(untitled2 main.c
         image.c
         image.h
         simplemath.c
-        simplemath.h)
+        benchmark.c
+        benchmark.h
+)

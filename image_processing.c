@@ -193,10 +193,8 @@ void simd_adjust_contrast(Image *image) {
                 image->pixels[i + 3].b, image->pixels[i + 2].b,
                 image->pixels[i + 1].b,  image->pixels[i].b
         );
-         sum =  _mm_add_ps(sum,_mm_div_ps(_mm_add_ps(_mm_add_ps(red, green), blue), _mm_set1_ps(3.0f)));
-
+        sum =  _mm_add_ps(sum,_mm_div_ps(_mm_add_ps(_mm_add_ps(red, green), blue), _mm_set1_ps(3.0f)));
     }
-
     float mean_brightness = _mm_cvtss_f32(_mm_hadd_ps(_mm_hadd_ps(sum, sum), sum));
 
     for (; i < num_pixels; ++i) {
@@ -230,10 +228,7 @@ void simd_adjust_contrast(Image *image) {
                     _mm_mul_ps(_mm_set1_ps(mean_brightness), _mm_sub_ps(_mm_set1_ps(1.0f), _mm_div_ps(_mm_set1_ps(contrast), _mm_set1_ps(brightness_deviation))))
             );
         }
-
-
-
-        adjusted_brightness = _mm_min_ps(_mm_max_ps(adjusted_brightness, _mm_setzero_ps()), _mm_set1_ps(255.0f));
+        adjusted_brightness = _mm_max_ps(_mm_min_ps(adjusted_brightness, _mm_set1_ps(255.0f)), _mm_set1_ps(0.0f));
         image->pixels[a].r = image->pixels[a].g =  image->pixels[a].b = (uint8_t)_mm_cvtss_f32(_mm_shuffle_ps(adjusted_brightness, adjusted_brightness, _MM_SHUFFLE(0, 0, 0, 0)));
         image->pixels[a + 1].r =image->pixels[a + 1].g = image->pixels[a + 1].b = (uint8_t)_mm_cvtss_f32(_mm_shuffle_ps(adjusted_brightness, adjusted_brightness, _MM_SHUFFLE(1, 1, 1, 1)));
         image->pixels[a + 2].r =image->pixels[a + 2].g = image->pixels[a + 2].b = (uint8_t)_mm_cvtss_f32(_mm_shuffle_ps(adjusted_brightness, adjusted_brightness, _MM_SHUFFLE(2, 2, 2, 2)));
