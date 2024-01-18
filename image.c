@@ -1,7 +1,7 @@
 #include <stdio.h>
 #include "image.h"
 #include <stdlib.h>
-
+#include "string.h"
 void read_ppm_dimensions(const char* filename, size_t* width, size_t* height) {
     FILE* file = fopen(filename, "r");
     if (!file) {
@@ -118,4 +118,5 @@ void writePPM(const char *filename, Image *img) {
     fwrite(img->pixels, 3 * img->width, img->height, fp);
     fclose(fp);
 }
+
 

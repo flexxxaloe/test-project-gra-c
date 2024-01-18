@@ -40,6 +40,7 @@ struct option options[] = {
         {0,            0,                 0, 0}
 };
 
+
 int main(int argc, char *argv[]) {
     const char *input_filename = argv[1];
     Image *image = readPPM(input_filename);
@@ -141,7 +142,7 @@ int main(int argc, char *argv[]) {
         }
         if (benchmark) {
             benchmarking(benchmark_repetitions, image, a, b, c, version);
-           // test_alg(image, a, b, c, version);
+           // test_alg(image, a, b, c, version); добавить команду t для тестов
         } else {
             if(version == 1){
                 convert_to_grayscale(image, a, b, c);
