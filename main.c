@@ -158,6 +158,7 @@ int main(int argc, char *argv[]) {
             }
         }
         writePPM(output_filename, image);
+
         printf("Brightness: %d\n", image->brightness);
         printf("Contrast: %f\n", image->contrast);
         printf("Coefficients: a=%f, b=%f, c=%f\n", a, b, c);
