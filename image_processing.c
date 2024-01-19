@@ -35,7 +35,7 @@ void simd_convert_to_grayscale(Image* image, float a, float b, float c) {
     size_t i;
     for ( i = 0; i < num_pixels - (num_pixels % 4); i += 4) {
 
-        // Загрузка 4 пикселей RGB в SIMD регистр
+        //  4 pixels RGB to SIMD reg
         __m128 pixels_rf = _mm_set_ps(
                 image->pixels[i + 3].r,  image->pixels[i+2].r,
                image->pixels[i + 1].r, image->pixels[i].r
@@ -49,20 +49,20 @@ void simd_convert_to_grayscale(Image* image, float a, float b, float c) {
                 image->pixels[i + 1].b,  image->pixels[i].b
         );
 
-        // Конвертация в тип float
+        // convert to  float
 
-        // Умножение каждой компоненты цвета на соответствующий коэффициент
+        // Умножение каждой компоненты цвета на соответствующий коэффициент | mul every component (r g b) with coeff (a b c)
         pixels_rf = _mm_mul_ps(pixels_rf, coeffa);
         pixels_gf = _mm_mul_ps(pixels_gf, coeffb);
         pixels_bf = _mm_mul_ps(pixels_bf, coeffc);
 
-        // Сложение взвешенных компонент
+        // Сложение взвешенных компонент | add to get sum
         __m128 sum = _mm_add_ps(_mm_add_ps(pixels_rf, pixels_gf), pixels_bf);
 
-        // Деление на сумму коэффициентов
+        // Деление на сумму коэффициентов | div -> get (gray value)
         sum = _mm_div_ps(sum, _mm_set_ps1(a + b + c));
 
-        // Контроль переполнения
+        // clamp
      // sum = _mm_min_ps(sum, _mm_set_ps1(255.0f));
         sum = clampToUint8(sum, image->brightness);
 
@@ -84,19 +84,19 @@ void simd_convert_to_grayscale(Image* image, float a, float b, float c) {
 
 
 void convert_to_grayscale(Image* image, float a, float b, float c) {
-    // Реализация конвертации в градации серого
+    // Реализация конвертации в градации серого | convert to gray
     size_t num_pixels = image->width * image->height;
 
     for (size_t i = 0; i < num_pixels; ++i) {
-        // Извлечение значений компонентов цвета текущего пикселя
+
         unsigned char red = image->pixels[i].r;
         unsigned char green = image->pixels[i].g;
         unsigned char blue = image->pixels[i].b;
 
-        // Вычисление взвешенного среднего для оттенка серого
+        // gray value
         unsigned char grayscale_value = (unsigned char)((a * red + b * green + c * blue) / (a + b + c));
         grayscale_value = clamp((int)image->brightness + grayscale_value, 0, 255);
-        // Запись значения в текущий пиксель в оттенках серого
+
         image->pixels[i].r = grayscale_value;
         image->pixels[i].g = grayscale_value;
         image->pixels[i].b = grayscale_value;
@@ -105,23 +105,29 @@ void convert_to_grayscale(Image* image, float a, float b, float c) {
 
 void adjust_contrast(Image *image) {
     float contrast = image->contrast;
-    // Реализация коррекции контраста
+    // picture size
     size_t num_pixels = image->width * image->height;
 
-    // Вычисление среднего значения яркости
+    //mean_brightness -> мю или как оно там называется
     float mean_brightness = 0.0f;
     for (size_t i = 0; i < num_pixels; ++i) {
         mean_brightness += (float)(image->pixels[i].r + image->pixels[i].g + image->pixels[i].b)/3;
     }
     mean_brightness /= (float)num_pixels;
-    // Вычисление стандартного отклонения яркости
+
+
+
     float brightness_deviation = 0.0f;
     for (size_t i = 0; i < num_pixels; ++i) {
         brightness_deviation += powf((float)image->pixels[i].r - mean_brightness, 2);
     }
+
+
     brightness_deviation = sqrtf(brightness_deviation / (float)num_pixels);
-    printf("Otklonenie Yarkosti: %f \n", brightness_deviation);
-    // Коррекция контраста
+
+
+    printf("Brightness deviation (sigma): %f \n", brightness_deviation);
+
     for (size_t i = 0; i < num_pixels; ++i) {
         float adjusted_brightness;
         if(brightness_deviation == 0 || contrast == 0){
@@ -130,6 +136,7 @@ void adjust_contrast(Image *image) {
             adjusted_brightness = (contrast / brightness_deviation) * (float)image->pixels[i].r +
                                         mean_brightness * (1 - (contrast / brightness_deviation));
         }
+
         image->pixels[i].r = clamp((int)adjusted_brightness, 0, 255);
         image->pixels[i].g = clamp((int)adjusted_brightness, 0, 255);
         image->pixels[i].b = clamp((int)adjusted_brightness, 0, 255);
@@ -137,23 +144,26 @@ void adjust_contrast(Image *image) {
 }
 void simple_adjust_contrast(Image *image) {
     float contrast = image->contrast;
-    // Реализация коррекции контраста
+
     size_t num_pixels = image->width * image->height;
 
-    // Вычисление среднего значения яркости
+
     float mean_brightness = 0.0f;
     for (size_t i = 0; i < num_pixels; ++i) {
         mean_brightness += (float)(image->pixels[i].r + image->pixels[i].g + image->pixels[i].b)/3;
     }
     mean_brightness /= (float)num_pixels;
-    // Вычисление стандартного отклонения яркости
+
+
     float brightness_deviation = 0.0f;
     for (size_t i = 0; i < num_pixels; ++i) {
         brightness_deviation += power((float)image->pixels[i].r - mean_brightness, 2);
     }
     brightness_deviation = sqrtfunc(brightness_deviation / (float)num_pixels);
-    printf("Otklonenie Yarkosti v prostom: %f \n", brightness_deviation);
-    // Коррекция контраста
+
+    printf("Brightness deviation simple version (sigma): %f \n", brightness_deviation);
+
+
     for (size_t i = 0; i < num_pixels; ++i) {
         float adjusted_brightness;
         if(brightness_deviation == 0|| contrast == 0){
@@ -172,7 +182,7 @@ void simd_adjust_contrast(Image *image) {
     float contrast = image->contrast;
     size_t num_pixels = image->width * image->height;
 
-// Вычисление среднего значения яркости
+
     __m128 sum = _mm_setzero_ps();
     size_t i;
     __m128 red;
@@ -208,25 +218,31 @@ void simd_adjust_contrast(Image *image) {
     }
     brightness_deviation = sqrtf(brightness_deviation / (float)num_pixels);
     // """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
-    // Коррекция контраста с использованием SIMD
+
 
 
     size_t a;
     for (a = 0; a < num_pixels - (num_pixels % 4); a += 4) {
-        // Загрузка значений пикселей в вектор SIMD
+
+
         __m128 pixel_values = _mm_set_ps(
                 image->pixels[a + 3].r, image->pixels[a + 2].r, image->pixels[a + 1].r, image->pixels[a].r
         );
+
         __m128 adjusted_brightness = pixel_values;
+
         if (brightness_deviation == 0 || contrast == 0) {
-            // Если нет коррекции, оставляем значения как есть
+            // Если нет коррекции, оставляем значения как есть | nothing
         } else {
+            //check other version if doesn`t understand | если ниче непонятно тут тоже самое что и в версии выше
             adjusted_brightness = _mm_add_ps(
                     _mm_mul_ps(_mm_div_ps(_mm_set1_ps(contrast), _mm_set1_ps(brightness_deviation)), adjusted_brightness),
                     _mm_mul_ps(_mm_set1_ps(mean_brightness), _mm_sub_ps(_mm_set1_ps(1.0f), _mm_div_ps(_mm_set1_ps(contrast), _mm_set1_ps(brightness_deviation))))
             );
         }
+
         adjusted_brightness = _mm_max_ps(_mm_min_ps(adjusted_brightness, _mm_set1_ps(255.0f)), _mm_set1_ps(0.0f));
+        //shift to get appropriate value
         image->pixels[a].r = image->pixels[a].g =  image->pixels[a].b = (uint8_t)_mm_cvtss_f32(_mm_shuffle_ps(adjusted_brightness, adjusted_brightness, _MM_SHUFFLE(0, 0, 0, 0)));
         image->pixels[a + 1].r =image->pixels[a + 1].g = image->pixels[a + 1].b = (uint8_t)_mm_cvtss_f32(_mm_shuffle_ps(adjusted_brightness, adjusted_brightness, _MM_SHUFFLE(1, 1, 1, 1)));
         image->pixels[a + 2].r =image->pixels[a + 2].g = image->pixels[a + 2].b = (uint8_t)_mm_cvtss_f32(_mm_shuffle_ps(adjusted_brightness, adjusted_brightness, _MM_SHUFFLE(2, 2, 2, 2)));
@@ -234,6 +250,7 @@ void simd_adjust_contrast(Image *image) {
 
     }
     for (; a < num_pixels; ++a) {
+
         float adjusted_brightness;
         if(brightness_deviation == 0|| contrast == 0){
             adjusted_brightness = (float)image->pixels[a].r;
@@ -241,6 +258,7 @@ void simd_adjust_contrast(Image *image) {
             adjusted_brightness = (contrast / brightness_deviation) * (float)image->pixels[a].r +
                                   mean_brightness * (1 - (contrast / brightness_deviation));
         }
+
         image->pixels[a].r = clamp((int)adjusted_brightness, 0, 255);
         image->pixels[a].g = clamp((int)adjusted_brightness, 0, 255);
         image->pixels[a].b = clamp((int)adjusted_brightness, 0, 255);

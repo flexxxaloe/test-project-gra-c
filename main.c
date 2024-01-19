@@ -46,7 +46,7 @@ int main(int argc, char *argv[]) {
     Image *image = readPPM(input_filename);
     if (image) {
 
-        float a = 0.2126f, b = 0.7152f, c = 0.0722f; // Для коэффициентов
+        float a = 0.2126f, b = 0.7152f, c = 0.0722f; // Для коэффициентов | koeffs from https://planetcalc.ru/9279/
         int version = 0;
         int option;
         int option_index = 0;
@@ -56,7 +56,7 @@ int main(int argc, char *argv[]) {
         image->contrast = 0.0f;
         image->brightness = 0;
 
-        // Разбор опций
+        // options
         while ((option = getopt_long(argc, argv, ":V:B:o:c:l:k:h", options, &option_index)) != -1) {
             switch (option) {
                 case 'V':
@@ -84,7 +84,7 @@ int main(int argc, char *argv[]) {
                     output_filename = optarg;
                     break;
                 case '?':
-                    // Если возникла ошибка, getopt_long уже вывел сообщение об ошибке
+
                     return 1;
                 case 'c':
                     sscanf(optarg, "%f,%f,%f", &a, &b, &c);
@@ -93,14 +93,14 @@ int main(int argc, char *argv[]) {
                     errno = 0; // Устанавливаем errno в 0 перед вызовом strtol
                     char *endptr;
                     image->brightness = strtol(optarg, &endptr, 10);
-                    // Проверяем ошибки преобразования
+                    // fails?
                     if (image->brightness < -255 || image->brightness > 255 || errno != 0) {
                         perror("strtol");
                         // Обработка ошибок
                         exit(EXIT_FAILURE);
                     }
 
-                    // Проверяем, была ли строка полностью преобразована
+                    // Проверяем, была ли строка полностью преобразована |Checking whether the string has been completely converted????
                     if (endptr == optarg) {
                         fprintf(stderr, "No digits were found in --brightness argument\n");
                         // Обработка ошибок
@@ -113,14 +113,14 @@ int main(int argc, char *argv[]) {
                     errno = 0; // Устанавливаем errno в 0 перед вызовом strtod
                     char *endpointer;
                     image->contrast = strtof(optarg, &endpointer);
-                    // Проверяем ошибки преобразования
+                    // Обработка ошибок | fails
                     if (image->contrast < -255.0 || image->contrast > 255.0 || errno != 0) {
                         perror("strtof");
                         // Обработка ошибок
                         exit(EXIT_FAILURE);
                     }
 
-                    // Проверяем, была ли строка полностью преобразована
+                    // Checking whether the string has been completely converted???
                     if (endptr == optarg) {
                         fprintf(stderr, "No digits were found in --contrast argument\n");
                         // Обработка ошибок
@@ -142,7 +142,7 @@ int main(int argc, char *argv[]) {
         }
         if (benchmark) {
             benchmarking(benchmark_repetitions, image, a, b, c, version);
-           // test_alg(image, a, b, c, version); добавить команду t для тестов
+           // test_alg(image, a, b, c, version); добавить команду t для тестов || test implement command -t ..
         } else {
             if(version == 1){
                 convert_to_grayscale(image, a, b, c);
@@ -157,8 +157,8 @@ int main(int argc, char *argv[]) {
                 adjust_contrast(image);
             }
         }
-        writePPM(output_filename, image);
 
+        writePPM(output_filename, image);
         printf("Brightness: %d\n", image->brightness);
         printf("Contrast: %f\n", image->contrast);
         printf("Coefficients: a=%f, b=%f, c=%f\n", a, b, c);

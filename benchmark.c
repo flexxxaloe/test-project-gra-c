@@ -7,7 +7,7 @@
 void benchmarking(int benchmark_repetitions, Image* image, float a, float b, float c, int version) {
     printf("Benchmarking with %d repetitions\n", benchmark_repetitions);
 
-    // Измеряем время выполнения функции
+    // check time
     clock_t start_time = clock();
     for (int i = 0; i < benchmark_repetitions; ++i) {
         if(version == 1){
@@ -39,7 +39,7 @@ void test_alg(Image* image, float a, float b, float c, int version) {
         version = r;
         for (size_t v = 0; v < length; v++) {
             printf("Benchmarking with %d repetitions\n", values[v]);
-            // Измеряем время выполнения функции
+            // check time
             clock_t start_time = clock();
             for (int i = 0; i < values[v]; ++i) {
                 if (version == 1) {

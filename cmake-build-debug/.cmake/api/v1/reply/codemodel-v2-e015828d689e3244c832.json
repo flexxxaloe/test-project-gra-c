@@ -49,8 +49,8 @@
 	"kind" : "codemodel",
 	"paths" : 
 	{
-		"build" : "C:/Users/mihai/CLionProjects/untitled2/cmake-build-debug",
-		"source" : "C:/Users/mihai/CLionProjects/untitled2"
+		"build" : "C:/Users/mihai/CLionProjects/test-project-gra-c/cmake-build-debug",
+		"source" : "C:/Users/mihai/CLionProjects/test-project-gra-c"
 	},
 	"version" : 
 	{
