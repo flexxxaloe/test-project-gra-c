@@ -126,7 +126,6 @@ void adjust_contrast(Image *image) {
     brightness_deviation = sqrtf(brightness_deviation / (float)num_pixels);
 
 
-    printf("Brightness deviation (sigma): %f \n", brightness_deviation);
 
     for (size_t i = 0; i < num_pixels; ++i) {
         float adjusted_brightness;
@@ -161,7 +160,6 @@ void simple_adjust_contrast(Image *image) {
     }
     brightness_deviation = sqrtfunc(brightness_deviation / (float)num_pixels);
 
-    printf("Brightness deviation simple version (sigma): %f \n", brightness_deviation);
 
 
     for (size_t i = 0; i < num_pixels; ++i) {
@@ -264,7 +262,101 @@ void simd_adjust_contrast(Image *image) {
         image->pixels[a].b = clamp((int)adjusted_brightness, 0, 255);
     }
 }
+void another_adjust_contrast(Image *image) {
+    float contrast = image->contrast;
 
+    size_t num_pixels = image->width * image->height;
+
+
+    float mean_brightness = 0.0f;
+    for (size_t i = 0; i < num_pixels; ++i) {
+        mean_brightness += (float)(image->pixels[i].r + image->pixels[i].g + image->pixels[i].b)/3;
+    }
+    mean_brightness /= (float)num_pixels;
+
+
+    for (size_t i = 0; i < num_pixels; ++i) {
+        float adjusted_brightness;
+        if((1 + contrast * (image->pixels[i].r - mean_brightness) == 0)){
+            adjusted_brightness = 0;
+        } else {
+            adjusted_brightness = image->pixels[i].r/(1 + contrast * (image->pixels[i].r - mean_brightness));
+        }
+        image->pixels[i].r = clamp((int)adjusted_brightness, 0, 255);
+        image->pixels[i].g = clamp((int)adjusted_brightness, 0, 255);
+        image->pixels[i].b = clamp((int)adjusted_brightness, 0, 255);
+    }
+}
+void another_simd_adjust_contrast(Image *image) {
+    float contrast = image->contrast;
+    size_t num_pixels = image->width * image->height;
+
+
+    __m128 sum = _mm_setzero_ps();
+    size_t i;
+    __m128 red;
+    __m128 green;
+    __m128 blue;
+    for (i = 0; i < num_pixels - (num_pixels % 4); i += 4) {
+        red = _mm_set_ps(
+                image->pixels[i + 3].r,  image->pixels[i + 2].r,
+                image->pixels[i + 1].r, image->pixels[i].r
+        );
+        green = _mm_set_ps(
+                image->pixels[i + 3].g,  image->pixels[i + 2].g,
+                image->pixels[i + 1].g, image->pixels[i].g
+        );
+        blue = _mm_set_ps(
+                image->pixels[i + 3].b, image->pixels[i + 2].b,
+                image->pixels[i + 1].b,  image->pixels[i].b
+        );
+        sum =  _mm_add_ps(sum,_mm_div_ps(_mm_add_ps(_mm_add_ps(red, green), blue), _mm_set1_ps(3.0f)));
+    }
+    float mean_brightness = _mm_cvtss_f32(_mm_hadd_ps(_mm_hadd_ps(sum, sum), sum));
+
+    for (; i < num_pixels; ++i) {
+        mean_brightness += (float)(image->pixels[i].r + image->pixels[i].g + image->pixels[i].b)/3;
+    }
+    mean_brightness /= (float)num_pixels;
+
+
+
+    size_t a;
+    for (a = 0; a < num_pixels - (num_pixels % 4); a += 4) {
+
+
+        __m128 pixel_values = _mm_set_ps(
+                image->pixels[a + 3].r, image->pixels[a + 2].r, image->pixels[a + 1].r, image->pixels[a].r
+        );
+
+        __m128 adjusted_brightness = pixel_values;
+
+
+        adjusted_brightness = _mm_div_ps(adjusted_brightness,_mm_add_ps(_mm_set1_ps(1.0f),_mm_mul_ps(_mm_set1_ps(contrast),_mm_sub_ps(adjusted_brightness, _mm_set1_ps(mean_brightness)))));
+
+
+        adjusted_brightness = _mm_max_ps(_mm_min_ps(adjusted_brightness, _mm_set1_ps(255.0f)), _mm_set1_ps(0.0f));
+        //shift to get appropriate value
+        image->pixels[a].r = image->pixels[a].g =  image->pixels[a].b = (uint8_t)_mm_cvtss_f32(_mm_shuffle_ps(adjusted_brightness, adjusted_brightness, _MM_SHUFFLE(0, 0, 0, 0)));
+        image->pixels[a + 1].r =image->pixels[a + 1].g = image->pixels[a + 1].b = (uint8_t)_mm_cvtss_f32(_mm_shuffle_ps(adjusted_brightness, adjusted_brightness, _MM_SHUFFLE(1, 1, 1, 1)));
+        image->pixels[a + 2].r =image->pixels[a + 2].g = image->pixels[a + 2].b = (uint8_t)_mm_cvtss_f32(_mm_shuffle_ps(adjusted_brightness, adjusted_brightness, _MM_SHUFFLE(2, 2, 2, 2)));
+        image->pixels[a + 3].r =image->pixels[a + 3].g = image->pixels[a + 3].b = (uint8_t)_mm_cvtss_f32(_mm_shuffle_ps(adjusted_brightness, adjusted_brightness, _MM_SHUFFLE(3, 3, 3, 3)));
+
+    }
+    for (; a < num_pixels; ++a) {
+
+        float adjusted_brightness;
+        if((1 + contrast * (image->pixels[i].r - mean_brightness) == 0)){
+            adjusted_brightness = 0;
+        } else {
+            adjusted_brightness = image->pixels[i].r/(1 + contrast * (image->pixels[i].r - mean_brightness));
+        }
+
+        image->pixels[a].r = clamp((int)adjusted_brightness, 0, 255);
+        image->pixels[a].g = clamp((int)adjusted_brightness, 0, 255);
+        image->pixels[a].b = clamp((int)adjusted_brightness, 0, 255);
+    }
+}
 /*
 void adjust_brightness_contrast(const Image* grayscale_img, int16_t brightness, float contrast, Image* result_img) {
     // Реализация корректировки яркости и контраста

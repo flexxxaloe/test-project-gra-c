@@ -12,4 +12,6 @@ void adjust_brightness_contrast(const Image* grayscale_img, int16_t brightness, 
 void adjust_contrast(Image *image);
 void simple_adjust_contrast(Image *image);
 void simd_adjust_contrast(Image *image);
+void another_adjust_contrast(Image *image);
+void another_simd_adjust_contrast(Image *image);
 #endif // IMAGE_PROCESSING_H

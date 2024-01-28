@@ -146,11 +146,17 @@ int main(int argc, char *argv[]) {
         } else {
             if(version == 1){
                 convert_to_grayscale(image, a, b, c);
-                simple_adjust_contrast(image);
+                simd_adjust_contrast(image);
             }else if(version == 2){
                 simd_convert_to_grayscale(image, a, b, c);
                 simd_adjust_contrast(image);
 
+            } else if(version == 3) {
+                convert_to_grayscale(image, a, b, c);
+                another_adjust_contrast(image);
+            } else if(version == 4) {
+                convert_to_grayscale(image, a, b, c);
+                another_simd_adjust_contrast(image);
             }
             else {
                 convert_to_grayscale(image, a, b, c);

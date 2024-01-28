@@ -17,6 +17,12 @@ void benchmarking(int benchmark_repetitions, Image* image, float a, float b, flo
             simd_convert_to_grayscale(image, a, b, c);
             simd_adjust_contrast(image);
 
+        }else if(version == 3) {
+            convert_to_grayscale(image, a, b, c);
+            another_adjust_contrast(image);
+        } else if(version == 4) {
+            convert_to_grayscale(image, a, b, c);
+            another_simd_adjust_contrast(image);
         }
         else {
             convert_to_grayscale(image, a, b, c);
@@ -49,7 +55,8 @@ void test_alg(Image* image, float a, float b, float c, int version) {
                     simd_convert_to_grayscale(image, a, b, c);
                     simd_adjust_contrast(image);
 
-                } else {
+                }
+                else {
                     convert_to_grayscale(image, a, b, c);
                     adjust_contrast(image);
                 }
